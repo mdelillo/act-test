@@ -1,0 +1,39 @@
+name: Test
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Start
+      run: echo "Starting"
+
+    - name: Docker
+      id: docker-action
+      uses: ./actions/docker
+      with:
+        who-to-greet: 'Alice'
+
+    - name: Composite 1
+      id: composite-action-1
+      uses: ./actions/composite
+      with:
+        who-to-greet: 'Bob'
+
+    - name: Composite 2
+      id: composite-action-2
+      uses: ./actions/composite
+
+    - name: Print outputs
+      run: |
+        echo "Time: ${{ steps.docker-action.outputs.time }}"
+        echo "Random number 1: ${{ steps.composite-action-1.outputs.random-number }}"
+        echo "Random number 2: ${{ steps.composite-action-2.outputs.random-number }}"
+
+    - name: End
+      run: echo "Ended"
