@@ -12,6 +12,9 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - uses: docker://alpine:3.13
+      with:
+        args: echo "THIS IS WORKING"
     - run: echo Hello ${{ inputs.who-to-greet }}.
       shell: bash
     - id: random-number-generator
@@ -19,3 +22,7 @@ runs:
       shell: bash
     - run: ${{ github.action_path }}/goodbye.sh
       shell: bash
+    - uses: docker://alpine:3.13
+      with:
+        somekey: somevalue
+        args: echo ${INPUT_SOMEKEY} | grep somevalue
